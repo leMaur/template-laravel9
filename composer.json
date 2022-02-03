@@ -5,7 +5,7 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.0",
@@ -15,6 +15,7 @@
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
+        "lemaur/toolbox": "^3.0",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.5.10",
@@ -38,14 +39,26 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "@php artisan clear-compiled",
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "models": "@php artisan ide-helper:models --write",
+        "analyse": "./vendor/bin/phpstan analyse --memory-limit=2G",
+        "refactor": "./vendor/bin/rector process",
+        "format": "./vendor/bin/php-cs-fixer fix --allow-risky=yes",
+        "test": "./vendor/bin/pest --exclude-group=e2e",
+        "test:fast": "./vendor/bin/pest --exclude-group=e2e --parallel",
+        "test:coverage": "./vendor/bin/pest --exclude-group=e2e --coverage --min=100 --coverage-html=.coverage --coverage-clover=coverage.xml",
+        "test:e2e": "@php artisan pest:dusk",
+        "test:mutation": "XDEBUG_MODE=coverage ./vendor/bin/infection --test-framework=pest --show-mutations"
     },
     "extra": {
         "laravel": {
@@ -55,7 +68,11 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true,
+            "pestphp/pest-plugin": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

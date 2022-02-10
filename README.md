@@ -1,7 +1,5 @@
 # Laravel 9 Template
 
-> 🚧 Keep in mind that Laravel 9 is not released yet!
-
 Are you frustrated to start a new project and having to install and configure Pest, Dusk, Phpstan, Php-cs-fixer, etc...?
 Me, too! This is why I created this template repo.
 

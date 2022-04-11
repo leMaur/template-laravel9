@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Tests\TestCase;
 
@@ -16,12 +17,39 @@ use Tests\TestCase;
 |
 */
 
-function actingAs(Authenticatable $user): TestCase
+function actingAs(?Authenticatable $user = null): TestCase
 {
+    if ($user === null) {
+        $user = User::factory()->withUuid()->create();
+    }
+
     return test()->actingAs($user);
 }
 
 function logout(): void
 {
     auth()->logout();
+}
+
+/**
+ * @throws JsonException
+ * @throws InvalidArgumentException
+ */
+function fixture(string $name): array
+{
+    $file = file_get_contents(
+        filename: base_path("tests/Fixtures/$name.json"),
+    );
+
+    if (! $file) {
+        throw new InvalidArgumentException(
+            message: "Cannot find fixture: [$name] at tests/Fixtures/$name.json",
+        );
+    }
+
+    return json_decode(
+        json: $file,
+        associative: true,
+        flags: JSON_THROW_ON_ERROR
+    );
 }

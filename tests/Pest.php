@@ -13,13 +13,15 @@ declare(strict_types=1);
 |
 */
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Validation\ValidationException;
+use Ramsey\Uuid\Uuid;
 use Tests\DuskTestCase;
 use Tests\TestCase;
 
 uses(TestCase::class)->in('Analysis');
-uses(TestCase::class, RefreshDatabase::class)->in('Feature');
-uses(DuskTestCase::class, RefreshDatabase::class)->group('e2e')->in('Browser');
+uses(TestCase::class, LazilyRefreshDatabase::class)->in('Feature');
+uses(DuskTestCase::class, LazilyRefreshDatabase::class)->group('e2e')->in('Browser');
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +36,9 @@ uses(DuskTestCase::class, RefreshDatabase::class)->group('e2e')->in('Browser');
 
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);
+});
+
+expect()->extend('toBeUuid4', function () {
+    expect($this->value)->toMatch('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/');
+    expect(Uuid::isValid($this->value))->toBeTrue();
 });

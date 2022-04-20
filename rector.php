@@ -31,8 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     }
 
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-    $parameters->set(Option::IMPORT_SHORT_CLASSES, true);
-    $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
+    $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
 
     $containerConfigurator->import(LevelSetList::UP_TO_PHP_81);
 

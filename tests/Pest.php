@@ -38,7 +38,7 @@ expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
 
-expect()->extend('toBeUuid4', function () {
-    expect($this->value)->toMatch('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/');
-    expect(Uuid::isValid($this->value))->toBeTrue();
+expect()->extend('toBeUuid', function () {
+    expect((string) $this->value)->toMatch('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/');
+    expect(Uuid::isValid((string) $this->value))->toBeTrue();
 });
